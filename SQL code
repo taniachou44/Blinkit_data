@@ -1,0 +1,114 @@
+create database Blinkitbd
+
+use [Blinkitbd]
+
+select * from BlinkITData
+
+select count(*) from BlinkITData
+
+update BlinkITData 
+set Item_Fat_Content= 
+case 
+when Item_Fat_Content in ('LF', 'low fat') then 'Low Fat'
+when Item_Fat_Content = 'reg' then 'Regular'
+else Item_Fat_Content
+end
+
+select distinct Item_Fat_Content from BlinkITData
+
+--Total_sales
+
+select concat(cast(sum(sales)/1000000 as decimal(10,2)),'M') as Total_sales_millions  from BlinkITData
+
+--Avg_sales
+
+select cast(avg(sales) as decimal(10,2)) as Avg_sale from BlinkITData
+
+--number_of_items
+
+select count(*) as number_of_items  from BlinkITData
+
+--avg_rating
+select cast(avg(Rating) as decimal(10,0)) as avg_rating from BlinkITData
+
+--Item_Fat_Content- sum,count,avg
+
+select * from BlinkITData
+
+select Item_Fat_Content ,
+concat(cast(sum(sales)/1000 as decimal(10,2)),'k') as total_sales,
+ cast(avg(sales) as decimal(10,2)) as Avg_sale,
+ count(*) as number_of_items  from  BlinkITData
+group by Item_Fat_Content 
+
+--Item_type- sum,count,avg 
+
+select top 5 Item_Type,
+concat(cast(sum(sales)/1000 as decimal(10,2)),'k') as total_sales,
+ cast(avg(sales) as decimal(10,2)) as Avg_sale,
+ count(*) as number_of_items  from  BlinkITData
+group by Item_Type order by total_sales desc,Avg_sale desc , number_of_items desc
+
+--Outlet_Location_Type,item_fat_content- sum,count,avg 
+
+select  Outlet_Location_Type, item_fat_content,
+concat(cast(sum(sales)/1000 as decimal(10,2)),'k') as total_sales,
+ cast(avg(sales) as decimal(10,2)) as Avg_sale,
+ count(*) as number_of_items  from  BlinkITData
+group by Outlet_Location_Type, item_fat_content order by total_sales desc,Avg_sale desc , number_of_items desc
+
+
+--pivot table
+
+select Outlet_Location_Type,
+       isnull([Low Fat],0) as Low_Fat,
+	   isnull([Regular],0) as Regular
+from
+(
+select  Outlet_Location_Type, item_fat_content,
+cast(sum(sales)/1000 as decimal(10,2)) as total_sales from BlinkITData
+ group by Outlet_Location_Type, item_fat_content
+ ) as sourcetable
+ pivot
+ (
+ sum(total_sales)
+ for item_fat_content in ([Low Fat], [Regular]) ) as pivottable
+ order by Outlet_Location_Type
+ 
+ select * from BlinkITData
+
+ -- outlet_Establishment_year- sum, avg, count
+
+select outlet_Establishment_year,
+concat(cast(sum(sales)/1000 as decimal(10,2)),'k') as total_sales,
+cast(avg(sales) as decimal(10,2)) as Avg_sale,
+ count(*) as number_of_items
+   from  BlinkITData
+group by outlet_Establishment_year 
+order by outlet_Establishment_year asc
+
+--sales_percentage by Outlet_size
+
+select Outlet_size, 
+     cast( sum(sales) as decimal(10,2)) as total_sales,
+	 concat(cast( (sum(sales)*100.0/sum(sum(sales)) over())as decimal(10,2)),'%') as sales_percentage
+	 from BlinkITData
+	 group by Outlet_size
+	 order by sales_percentage desc
+
+--Outlet_Location_Type- sum,avg,count
+
+select  Outlet_Location_Type,
+concat(cast(sum(sales)/1000 as decimal(10,2)),'k') as total_sales,
+ cast(avg(sales) as decimal(10,2)) as Avg_sale,
+ count(*) as number_of_items  from  BlinkITData
+group by Outlet_Location_Type
+
+--Outlet_Type- sum,avg,count
+
+select  Outlet_Type,
+concat(cast(sum(sales)/1000 as decimal(10,2)),'k') as total_sales,
+ cast(avg(sales) as decimal(10,2)) as Avg_sale,
+ count(*) as number_of_items  from  BlinkITData
+group by Outlet_Type
+
