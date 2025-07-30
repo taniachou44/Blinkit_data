@@ -17,3 +17,5 @@ High-performing item types and outlets.
 
 Tools Used: Power BI | SQL | Data Cleaning | KPI Design | Dashboarding
 
+![Dashboard preview]()
+
