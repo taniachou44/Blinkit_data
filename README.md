@@ -17,5 +17,5 @@ High-performing item types and outlets.
 
 Tools Used: Power BI | SQL | Data Cleaning | KPI Design | Dashboarding
 
-![Dashboard preview]()
+![Dashboard preview](https://github.com/taniachou44/Blinkit_data/blob/main/BLINKIT_VISUALIZATION__SS.jpg)
 
